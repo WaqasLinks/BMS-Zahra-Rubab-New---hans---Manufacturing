@@ -1,0 +1,196 @@
+﻿@model MYBUSINESS.Models.MO
+
+@{
+    ViewBag.Title = "Create MO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Wrapper. Contains page content -->
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <form role="form">
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Update MO</h3>
+                        </div>
+
+                        <div class="box-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label" })
+
+                                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ProductId, "Select Product to manufacture", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("ProductId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Description", htmlAttributes: new { @class = "control-label" })
+
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+
+                                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control from-date-picker", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })
+
+                                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control from-date-picker", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label" })
+
+                                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("Status", new SelectList(ViewBag.StatusOptionLst, "Value", "Text", @Model.Status), new { @class = "form-control"})
+                                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                        <div class="box-footer">
+                            <input type="submit" id="CreateMO" value="Update" class="btn btn-primary" />
+                            @Html.ActionLink("Back to List", "Index")
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Notes</h3>
+                        </div>
+
+                        <div class="box-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                                <textarea id="compose_textarea" name="Notes" rows="1" cols="100" class="form-control" placeholder="Notes/Pictures" data-toggle="tooltip" data-placement="top" title="Notes">@Model.Notes</textarea>
+                                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+        </section>
+
+    </form>
+}
+
+
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css">
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $('#CreateMO').click(function () {
+
+            var qty = $("#Qty").val();
+            var product = $("#ProductId :selected").text();
+            var StatusText = $("#Status :selected").text();
+            var currentStatus = $("#Status").val();
+            //alert('@ViewBag.StatusInDB');
+
+            if ('@ViewBag.StatusInDB' != '1' && currentStatus == "1") {
+                if (confirm(qty + ' will be add to the product ' + product + ' quantity and order will be marked as complete. Sure?')) {
+                    return true;
+                } else {
+                    return false;
+
+                }
+            }
+
+            if ('@ViewBag.StatusInDB' == '1' && currentStatus != "1") {
+                if (confirm(qty + ' will be subtract from the product ' + product + ' quantity and order will be marked as ' + StatusText +'. Sure?')) {
+                    return true;
+                } else {
+                    return false;
+
+                }
+            }
+
+
+
+        });
+
+        $("#compose_textarea").summernote({
+            height: 400
+        });
+
+
+        $('.from-date-picker').datetimepicker({
+            dateFormat: "dd-M-yy",
+            timeFormat: "hh:mm tt",
+            showOn: "both",
+            timeInput: true,
+            stepHour: 1,
+            stepMinute: 5,
+            oneLine: true,
+            numberOfMonths: 2,
+            //changeMonth: true,
+            //changeYear: true,
+            controlType: 'select',
+            buttonImageOnly: true,
+            buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+            buttonText: "Select date"
+        });
+
+
+
+
+    });
+
+
+
+
+
+
+</script>
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
